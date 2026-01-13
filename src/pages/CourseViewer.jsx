@@ -107,7 +107,7 @@ const CourseViewer = () => {
     };
 
     fetchCourseData();
-  }, [courseId]);
+  }, [courseId, token]);
 
   // Calculate total lectures
   const getTotalLectures = () => {

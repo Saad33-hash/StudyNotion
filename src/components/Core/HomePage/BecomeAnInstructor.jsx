@@ -10,9 +10,9 @@ const BecomeAnInstructor = () => {
       {/* Image Section */}
       <div className='relative shadow-[-20px_-20px_0px_0px] shadow-white w-full lg:w-auto'>
         <div className='max-w-full'>
-          <img 
-            src={instructor} 
-            alt="instructor image"
+          <img
+            src={instructor}
+            alt="instructor"
             className='object-contain h-[280px] sm:h-[320px] lg:h-[350px] shadow-richblack-5'
           />
         </div>
@@ -22,8 +22,8 @@ const BecomeAnInstructor = () => {
       <div className='flex flex-col gap-4 lg:gap-6 justify-center items-start w-full lg:max-w-[40%]'>
         <div className='text-white text-2xl sm:text-3xl font-light w-full lg:w-[50%]'>
           Become an
-          <CodingSkillText text={"instructor"}/>
-        </div>  
+          <CodingSkillText text={"instructor"} />
+        </div>
 
         <div className='text-richblack-300 text-sm sm:text-base w-full lg:w-[80%]'>
           Instructors from around the world teach millions of students on
@@ -34,7 +34,7 @@ const BecomeAnInstructor = () => {
           <Button isActive={true} linkto={"/signUp"}>
             <div className='flex items-center gap-1'>
               Start teaching Today
-              <FaArrowRight/>
+              <FaArrowRight />
             </div>
           </Button>
         </div>
