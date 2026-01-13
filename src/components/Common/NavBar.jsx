@@ -21,7 +21,7 @@ const NavBar = () => {
   const fectchSubLink = async () => {
     try {
       const result = await apiConnector("GET", categories.CATEGORIES_API);
-      setSubLinks(result.data.category)
+      setSubLinks(result?.data?.category || [])
     } catch (error) {
       console.log("Could not fetch any data", error);
     }
@@ -44,7 +44,7 @@ const NavBar = () => {
   return (
     <div className='bg-richblack-700 border-b-2 border-richblack-800'>
       <div className='flex justify-between items-center p-4 w-full max-w-maxContent mx-auto'>
-        
+
         {/* Logo */}
         <Link to="/">
           <img src={logo} alt="studyNotion logo" className='h-[30px]' loading='lazy' />
@@ -66,7 +66,7 @@ const NavBar = () => {
                     <div className="absolute left-1/2 top-[120%] -translate-x-1/2 bg-richblack-5 text-richblack-900 rounded-md shadow-md flex flex-col gap-2 p-3 opacity-0 invisible transition-all duration-200 group-hover:opacity-100 group-hover:visible lg:w-[220px] z-50">
                       <div className='absolute left-[50%] top-0 translate-x-[80%] translate-y-[-45%] h-6 w-6 rounded rotate-45 bg-richblack-5'></div>
                       <div>
-                        {subLinks.length > 0 ? (
+                        {subLinks?.length > 0 ? (
                           subLinks?.map((subLink, index) => (
                             <Link key={index} to={`/catalog/${subLink._id}`} className='flex flex-col gap-2 hover:bg-richblack-50 p-2 rounded'>
                               {subLink.names}
