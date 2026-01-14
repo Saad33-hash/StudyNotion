@@ -12,7 +12,15 @@ const mailSender = async (email, title, body) => {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
       },
+      logger: true,
+      debug: true,
+      tls: {
+        rejectUnauthorized: false
+      }
     });
+
+    console.log("Transporter initialized with user:", process.env.MAIL_USER ? process.env.MAIL_USER.substring(0, 4) + "..." : "undefined");
+    console.log("Password length:", process.env.MAIL_PASS ? process.env.MAIL_PASS.length : 0);
 
     // Wrap in an async IIFE so we can use await.
 
