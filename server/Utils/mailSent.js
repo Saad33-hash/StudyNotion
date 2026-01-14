@@ -28,10 +28,13 @@ const mailSender = async (email, title, body) => {
     return data;
   }
   catch (error) {
-    // Log more details if available (Brevo errors often have a response body)
-    if (error.response && error.response.body) {
-      console.error("Brevo API Error Detail:", JSON.stringify(error.response.body));
+    // Log deep error details from Axios (Brevo SDK uses Axios)
+    if (error.response && error.response.data) {
+      console.error("Brevo API Error Detail:", JSON.stringify(error.response.data));
+    } else if (error.response && error.response.body) {
+      console.error("Brevo API Error Detail (body):", JSON.stringify(error.response.body));
     }
+
     console.error("Error occurred while sending mail via Brevo:", error.message);
     throw error;
   }
