@@ -3,6 +3,7 @@ const nodemailer = require("nodemailer");
 // Create a test account or replace with real credentials.
 const mailSender = async (email, title, body) => {
   try {
+    // Using gmail service to handle authentication automatically
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
