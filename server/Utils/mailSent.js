@@ -17,7 +17,7 @@ const mailSender = async (email, title, body) => {
 
     const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
 
-    // Create the raw email message (MIME format)
+    // Create the raw email message (MIME format using CRLF \r\n)
     const utf8Subject = `=?utf-8?B?${Buffer.from(title).toString('base64')}?=`;
     const messageParts = [
       'From: StudyNotion <saadtkd786@gmail.com>',
@@ -28,7 +28,7 @@ const mailSender = async (email, title, body) => {
       '',
       body,
     ];
-    const message = messageParts.join('\n');
+    const message = messageParts.join('\r\n');
 
     // The Gmail API requires the message to be base64url encoded
     const encodedMessage = Buffer.from(message)
