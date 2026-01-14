@@ -1,5 +1,4 @@
 const { google } = require('googleapis');
-const nodemailer = require('nodemailer');
 
 const mailSender = async (email, title, body) => {
   try {
@@ -8,48 +7,48 @@ const mailSender = async (email, title, body) => {
     const REDIRECT_URI = process.env.GMAIL_REDIRECT_URI || "https://developers.google.com/oauthplayground";
     const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
 
-    console.log("--- START GMAIL DEBUG ---");
-    console.log("Available Env Keys:", Object.keys(process.env).filter(k => !k.includes("KEY") && !k.includes("PASS")).join(", "));
-    console.log("GMAIL_CLIENT_ID present:", !!CLIENT_ID);
-    console.log("GMAIL_CLIENT_SECRET present:", !!CLIENT_SECRET);
-    console.log("GMAIL_REFRESH_TOKEN present:", !!REFRESH_TOKEN);
-    console.log("--- END GMAIL DEBUG ---");
-
+    // Basic presence check
     if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
-      console.error("CRITICAL: Gmail API credentials missing.");
-      throw new Error("Gmail API credentials (CI/CS/RT) missing from environment variables.");
+      throw new Error("Gmail API credentials missing from environment variables.");
     }
 
     const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
     oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-    const accessToken = await oAuth2Client.getAccessToken();
+    const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: 'saadtkd786@gmail.com',
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        refreshToken: REFRESH_TOKEN,
-        accessToken: accessToken.token,
+    // Create the raw email message (MIME format)
+    const utf8Subject = `=?utf-8?B?${Buffer.from(title).toString('base64')}?=`;
+    const messageParts = [
+      'From: StudyNotion <saadtkd786@gmail.com>',
+      `To: ${email}`,
+      'Content-Type: text/html; charset=utf-8',
+      'MIME-Version: 1.0',
+      `Subject: ${utf8Subject}`,
+      '',
+      body,
+    ];
+    const message = messageParts.join('\n');
+
+    // The Gmail API requires the message to be base64url encoded
+    const encodedMessage = Buffer.from(message)
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+    const res = await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: {
+        raw: encodedMessage,
       },
     });
 
-    const mailOptions = {
-      from: 'StudyNotion <saadtkd786@gmail.com>',
-      to: email,
-      subject: title,
-      html: body,
-    };
-
-    const result = await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully via Gmail API:", result.messageId);
-    return result;
+    console.log("Email sent successfully via Pure Gmail REST API:", res.data.id);
+    return res.data;
   }
   catch (error) {
-    console.error("Error occurred while sending mail via Gmail API:", error.message);
+    console.error("Error occurred while sending mail via Gmail REST API:", error.message);
     throw error;
   }
 }
