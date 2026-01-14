@@ -49,7 +49,7 @@ const resetPasswordToken = async (req, res) => {
         console.log(error)
         return res.status(500).json({
             success: false,
-            message: "Something worng with reseting passowrd in resrtpassword function in controller"
+            message: `Something went wrong while sending reset password mail: ${error.message}`
         })
 
     }
@@ -101,7 +101,7 @@ const resetPassword = async (req, res) => {
         console.log(error)
         return res.status(500).json({
             success: false,
-            message: "Something worng with reseting passowrd in resrtpassword function in controller"
+            message: `Something went wrong while resetting password: ${error.message}`
         })
     }
 }
