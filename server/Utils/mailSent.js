@@ -1,41 +1,48 @@
-const SibApiV3Sdk = require('@getbrevo/brevo');
+const { google } = require('googleapis');
+const nodemailer = require('nodemailer');
 
 const mailSender = async (email, title, body) => {
   try {
-    if (!process.env.BREVO_API_KEY) {
-      console.error("CRITICAL: BREVO_API_KEY is missing from environment variables");
-      throw new Error("BREVO_API_KEY is missing");
+    const CLIENT_ID = process.env.GMAIL_CLIENT_ID;
+    const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET;
+    const REDIRECT_URI = process.env.GMAIL_REDIRECT_URI || "https://developers.google.com/oauthplayground";
+    const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
+
+    if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
+      console.error("CRITICAL: Gmail API credentials missing.");
+      throw new Error("Gmail API credentials (CI/CS/RT) missing from environment variables.");
     }
 
-    console.log("Initializing Brevo API with key starting with:", process.env.BREVO_API_KEY.substring(0, 5) + "...");
+    const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+    oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-    // Initialize Brevo
-    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    apiInstance.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
+    const accessToken = await oAuth2Client.getAccessToken();
 
-    console.log("Sending email via Brevo to:", email);
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'saadtkd786@gmail.com',
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: accessToken.token,
+      },
+    });
 
-    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    sendSmtpEmail.subject = title;
-    sendSmtpEmail.htmlContent = body;
-    // Updated name to match your Brevo Dashboard exactly
-    sendSmtpEmail.sender = { name: "My Company", email: "saadtkd786@gmail.com" };
-    sendSmtpEmail.to = [{ email: email }];
+    const mailOptions = {
+      from: 'StudyNotion <saadtkd786@gmail.com>',
+      to: email,
+      subject: title,
+      html: body,
+    };
 
-    const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
-
-    console.log("Email sent successfully via Brevo:", data.messageId);
-    return data;
+    const result = await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully via Gmail API:", result.messageId);
+    return result;
   }
   catch (error) {
-    // Log deep error details from Axios (Brevo SDK uses Axios)
-    if (error.response && error.response.data) {
-      console.error("Brevo API Error Detail:", JSON.stringify(error.response.data));
-    } else if (error.response && error.response.body) {
-      console.error("Brevo API Error Detail (body):", JSON.stringify(error.response.body));
-    }
-
-    console.error("Error occurred while sending mail via Brevo:", error.message);
+    console.error("Error occurred while sending mail via Gmail API:", error.message);
     throw error;
   }
 }
