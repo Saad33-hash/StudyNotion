@@ -1,29 +1,29 @@
-const { Resend } = require('resend');
+const SibApiV3Sdk = require('@getbrevo/brevo');
 
-// Initialize Resend with API Key from environment variables
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Brevo with API Key
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 const mailSender = async (email, title, body) => {
   try {
-    console.log("Sending email via Resend to:", email);
+    console.log("Sending email via Brevo to:", email);
 
-    const { data, error } = await resend.emails.send({
-      from: 'StudyNotion <onboarding@resend.dev>', // Default Resend testing email
-      to: email,
-      subject: title,
-      html: body,
-    });
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    sendSmtpEmail.subject = title;
+    sendSmtpEmail.htmlContent = body;
+    sendSmtpEmail.sender = { name: "StudyNotion", email: "saadtkd786@gmail.com" };
+    sendSmtpEmail.to = [{ email: email }];
 
-    if (error) {
-      console.error("Resend Error:", error);
-      throw new Error(error.message);
-    }
+    const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
 
-    console.log("Email sent successfully via Resend:", data.id);
+    console.log("Email sent successfully via Brevo:", data.messageId);
     return data;
   }
   catch (error) {
-    console.log("Error occurred while sending mail via Resend:", error.message);
+    console.log("Error occurred while sending mail via Brevo:", error.message);
     throw error;
   }
 }
