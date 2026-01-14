@@ -8,12 +8,15 @@ const mailSender = async (email, title, body) => {
     const REDIRECT_URI = process.env.GMAIL_REDIRECT_URI || "https://developers.google.com/oauthplayground";
     const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
 
-    console.log("DEBUG: GMAIL_CLIENT_ID present:", !!CLIENT_ID);
-    console.log("DEBUG: GMAIL_CLIENT_SECRET present:", !!CLIENT_SECRET);
-    console.log("DEBUG: GMAIL_REFRESH_TOKEN present:", !!REFRESH_TOKEN);
+    console.log("--- START GMAIL DEBUG ---");
+    console.log("Available Env Keys:", Object.keys(process.env).filter(k => !k.includes("KEY") && !k.includes("PASS")).join(", "));
+    console.log("GMAIL_CLIENT_ID present:", !!CLIENT_ID);
+    console.log("GMAIL_CLIENT_SECRET present:", !!CLIENT_SECRET);
+    console.log("GMAIL_REFRESH_TOKEN present:", !!REFRESH_TOKEN);
+    console.log("--- END GMAIL DEBUG ---");
 
     if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
-      console.error("CRITICAL: Gmail API credentials missing. Please check your Railway Variables tab.");
+      console.error("CRITICAL: Gmail API credentials missing.");
       throw new Error("Gmail API credentials (CI/CS/RT) missing from environment variables.");
     }
 
