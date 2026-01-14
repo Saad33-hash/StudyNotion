@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const { cloudinaryConnect } = require("./Config/cloudinary");
 
 const auth = require("./Routes/auth");
