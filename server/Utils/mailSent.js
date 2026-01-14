@@ -22,8 +22,16 @@ const mailSender = async (email, title, body) => {
     console.log("Transporter initialized with user:", process.env.MAIL_USER ? process.env.MAIL_USER.substring(0, 4) + "..." : "undefined");
     console.log("Password length:", process.env.MAIL_PASS ? process.env.MAIL_PASS.length : 0);
 
-    // Wrap in an async IIFE so we can use await.
+    // Verify connection configuration
+    try {
+      await transporter.verify();
+      console.log("Transporter is ready to take our messages");
+    } catch (verifyError) {
+      console.error("Transporter verification failed:", verifyError);
+      throw verifyError;
+    }
 
+    // Wrap in an async IIFE so we can use await.
     const info = await transporter.sendMail({
       from: process.env.MAIL_USER,
       to: `${email}`,
