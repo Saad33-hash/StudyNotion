@@ -6,8 +6,8 @@ const mailSender = async (email, title, body) => {
     // Using gmail service to handle authentication automatically
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
