@@ -1,162 +1,142 @@
-**StudyNotion**
+# <img src="./public/banner.png" alt="StudyNotion Banner" width="100%">
 
-It is an edtech platform where students can buy courses without actually paying. It is just a showcase. Payment gateway can be integrated like Stripe and Razorpay. Students can watch video lectures and track their progress. Instructors can create courses.
+<div align="center">
 
----
+# StudyNotion - An EdTech Platform
 
-**The Stack**
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white)](https://redux.js.org/)
 
-**Frontend**
- React 18 with React Router for navigation
- Redux Toolkit for state management
- Tailwind CSS for styling
- Swiper for carousels, SweetAlert2 for notifications
+StudyNotion is a modern, full-stack EdTech platform built with the MERN stack. It provides a seamless experience for students to learn and instructors to teach, featuring a robust course management system, progress tracking, and interactive learning experiences.
 
-**Backend**
- Express.js (v5) on Node.js
- MongoDB with Mongoose ODM
- JWT for authentication
- Cloudinary for media storage
- REST API with Google Cloud Console/OAuth for transactional emails
+[Explore Features](#key-features) • [Getting Started](#getting-started) • [Tech Stack](#tech-stack) • [License](#license)
+
+</div>
 
 ---
 
-**Project Structure**
+## Key Features
 
+### For Students
+- **Course Catalog**: Browse through a wide variety of courses with category-based filtering.
+- **Learning Dashboard**: Track your progress, view enrolled courses, and manage your wishlist.
+- **Interactive Lessons**: High-quality video lectures with progress tracking.
+- **Ratings & Reviews**: Share your feedback and see what others think about the courses.
+
+### For Instructors
+- **Course Builder**: Create and manage detailed courses with multi-level sections and subsections.
+- **Media Management**: Upload thumbnails and video lectures seamlessly via Cloudinary.
+- **Analytics**: Gain insights into your courses and student engagement.
+- **Draft/Publish**: Control the visibility of your courses at every step.
+
+---
+
+## Tech Stack
+
+### Frontend
+- **Framework**: React 18
+- **State Management**: Redux Toolkit
+- **Styling**: Tailwind CSS
+- **Routing**: React Router
+- **Animations/UI**: Swiper, SweetAlert2, Framer Motion (where applicable)
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: JWT & OTP (Email verification)
+- **Email Service**: Google Cloud Console/OAuth integration
+- **Media Storage**: Cloudinary
+
+---
+
+## Project Structure
+
+```bash
 studynotion/
-  src/                        React frontend
-    components/
-      Common/                 NavBar, Footer, Rating stars
-      Core/
-        Auth/                 Login, Signup, Password reset
-        Catalog/              Course browsing
-        Course/               Course details, content viewer
-        Dashboard/            User/Instructor dashboards
-        HomePage/             Landing page components
-    pages/                    Route-level components
-    Services/                 API calls and operations
-    Slices/                   Redux slices
-    Reducer/                  Root reducer
-
-  server/                     Express backend
-    Config/                   DB, Cloudinary, Razorpay setup
-    Controllers/              Business logic
-    Models/                   Mongoose schemas
-    Routes/                   API endpoints
-    Middlewares/              Auth middleware
-    Mail/Templates/           Email templates
-    Utils/                    Helpers (image upload, mail)
-
-  build/                      Production build output
+├── src/                # React Frontend
+│   ├── components/     # Reusable UI components (Auth, Catalog, Dashboard, etc.)
+│   ├── pages/          # Page-level components and routes
+│   ├── Services/       # API integration layer
+│   └── Slices/         # Redux state management
+├── server/             # Node.js/Express Backend
+│   ├── Controllers/    # Business logic for routes
+│   ├── Models/         # Mongoose schemas
+│   ├── Routes/         # API endpoint definitions
+│   └── Utils/          # Helper functions (Image upload, Mail)
+└── public/             # Static assets
+```
 
 ---
 
-**Data Models**
+## Getting Started
 
-User - Students, instructors, admins with profiles
-Course - Title, description, price, thumbnail, sections
-Section - Groups of subsections within a course
-SubSection - Individual video lectures
-Category - Course categorization
-Payment - Transaction records
-CourseProgress - Tracks completed videos per user
-RatingAndReview - User reviews on courses
-OTP - Email verification codes
-Profile - Extended user info (about, DOB, etc.)
+### Prerequisites
+- **Node.js**: v18 or higher
+- **MongoDB**: Local instance or Atlas URI
+- **Cloudinary**: Account for media storage
+- **Razorpay**: Account for payment integration (Demo mode supported)
 
----
+### Environment Variables
+Create a `.env` file in the `server` directory with the following:
 
-**API Routes**
+| Variable | Description |
+| :--- | :--- |
+| `PORT` | Backend port (default 4000) |
+| `MONGODB_URL` | Your MongoDB connection string |
+| `JWT_SECRET` | Secret key for JWT signing |
+| `CLOUD_NAME` | Cloudinary Cloud Name |
+| `API_KEY` | Cloudinary API Key |
+| `API_SECRET` | Cloudinary API Secret |
+| `RAZORPAY_KEY` | Razorpay Key ID |
+| `RAZORPAY_SECRET` | Razorpay Key Secret |
 
-/studyNotion/auth → Signup, login, OTP verification, password reset
-/studyNotion/Courseroutes → CRUD for courses, categories, ratings
-/studyNotion/sectionandsubsection → Manage course structure
-/studyNotion/profile → User profile operations
-/studyNotion/contact → Contact form submissions
+### Installation
 
----
-
-**Getting Started**
-
-**Prerequisites**
-Node.js 18+
-MongoDB (local or Atlas)
-Cloudinary account
-Razorpay account (for payments)
-
-**Environment Variables**
-
-Create .env in /server:
-
-PORT=4000
-MONGODB_URL=your_mongo_connection_string
-FRONTEND_URL=http://localhost:3000
-JWT_SECRET=your_jwt_secret
-CLOUD_NAME=your_cloudinary_cloud
-API_KEY=your_cloudinary_key
-API_SECRET=your_cloudinary_secret
-RAZORPAY_KEY=your_razorpay_key
-RAZORPAY_SECRET=your_razorpay_secret
-MAIL_HOST=smtp.example.com
-MAIL_USER=your_email
-MAIL_PASS=your_password
-
-**Installation**
-
-npm install - Install frontend dependencies
-cd server && npm install - Install backend dependencies
-npm run dev - Run both frontend and backend together
-
-Frontend runs on http://localhost:3000
-Backend runs on http://localhost:4000
+1. **Clone the repository**
+2. **Install Frontend Dependencies**
+   ```bash
+   npm install
+   ```
+3. **Install Backend Dependencies**
+   ```bash
+   cd server && npm install
+   ```
+4. **Run the Application**
+   ```bash
+   npm run dev
+   ```
 
 ---
 
-**Key Features**
+## API Endpoints
 
-**Authentication**
-Email/password signup with OTP verification
-JWT-based sessions
-Password reset via email
-
-**Course Management**
-Create courses with sections and video subsections
-Upload thumbnails and videos to Cloudinary
-Publish/unpublish courses
-
-**Learning Experience**
-Course catalog with category filtering
-Video player with progress tracking
-Ratings and reviews system
-
-**Dashboard**
-Student: Enrolled courses, progress, wishlist, purchase history
-Instructor: My courses, add/edit courses, analytics
-
-
+- **Auth**: `/studyNotion/auth` (Login, Signup, OTP)
+- **Courses**: `/studyNotion/Courseroutes` (Create, Read, Update, Delete)
+- **Structure**: `/studyNotion/sectionandsubsection` (Manage content)
+- **Profile**: `/studyNotion/profile` (User settings)
 
 ---
 
-**Scripts**
+## Deployment
 
-npm start - Runs React dev server
-npm run server - Runs Express server with nodemon
-npm run dev - Runs both concurrently
-npm run build - Creates production build
-
----
-
-**Deployment**
-
-Frontend is deployed on Vercel . Backend is  deployed to Railway, Render, or any Node.js host.
-
-Make sure to:
-1. Set all environment variables in your hosting platform
-2. Update FRONTEND_URL to your production frontend URL
-3. Configure CORS origins appropriately
+The application is configured for deployment on:
+- **Frontend**: [Vercel](https://vercel.com/)
+- **Backend**: [Railway](https://railway.app/) / [Render](https://render.com/)
 
 ---
 
-**License**
+## License
 
-Do whatever you want with it. Just don't blame me if something breaks.
+This project is licensed under the [MIT License](LICENSE) (or provided "as is"). Feel free to explore and build upon it!
+
+---
+
+<div align="center">
+  Made with ❤️ for the Developer Community
+</div>
+
