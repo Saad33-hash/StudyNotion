@@ -1,6 +1,9 @@
 {
   "name": "studynotion",
   "version": "1.0.0",
+  "engines": {
+    "node": "20.x"
+  },
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
